@@ -7,16 +7,21 @@
 
 #define TICK_INTERVEL_MS 150
 
+typedef enum { GAME_RUNNING, GAME_OVER } GameState;
+
 int main(void) {
   enable_raw_mode();
 
+  GameState state = GAME_RUNNING;
+
   Snake snake = create_snake();
   Food food = spawn_food();
+
   char grid[GRID_HEIGHT][GRID_WIDTH];
 
   srand((unsigned int)time(NULL));
 
-  while (1) {
+  while (state == GAME_RUNNING) {
     int key = read_key();
 
     if (key == 'q' || key == 'Q') {
@@ -28,6 +33,11 @@ int main(void) {
     }
 
     move_snake(&snake);
+
+    if (snake_hit_wall(&snake)) {
+      state = GAME_OVER;
+      break;
+    }
 
     if (snake.body[0].x == food.x && snake.body[0].y == food.y) {
       grow_snake(&snake);
@@ -42,7 +52,14 @@ int main(void) {
     usleep(TICK_INTERVEL_MS * 1000);
   }
 
-  destroy_snake(&snake);
+  if (state == GAME_OVER) {
+    destroy_snake(&snake);
+    render_game_over();
+    while (read_key() == -1) {
+      usleep(TICK_INTERVEL_MS * 100);
+    }
+  }
+
   disable_raw_mode();
 
   return 0;

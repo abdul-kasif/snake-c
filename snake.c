@@ -1,4 +1,6 @@
 #include "snake.h"
+#include "terminal.h"
+#include <iso646.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -112,4 +114,15 @@ bool grow_snake(Snake *s) {
   s->length++;
 
   return true;
+}
+
+bool snake_hit_wall(const Snake *s) {
+  if (!s || s->length <= 0) {
+    return false;
+  }
+
+  int x = s->body[0].x;
+  int y = s->body[0].y;
+
+  return (x < 0 || x >= GRID_WIDTH || y < 0 || y >= GRID_HEIGHT);
 }

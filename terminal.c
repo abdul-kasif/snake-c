@@ -79,3 +79,13 @@ void draw_food_on_grid(char grid[GRID_HEIGHT][GRID_WIDTH], const Food *f) {
     grid[y][x] = '#';
   }
 }
+
+void render_game_over(void) {
+  clear_terminal();
+  printf("\n\n");
+  printf("   =====================\n");
+  printf("        GAME OVER\n");
+  printf("   =====================\n");
+  printf("\n   Press any key to exit\n");
+  fflush(stdout);
+}
