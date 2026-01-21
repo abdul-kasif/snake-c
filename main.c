@@ -10,6 +10,23 @@
 
 typedef enum { GAME_RUNNING, GAME_OVER } GameState;
 
+static int compute_tick_delay_ms(const int score) {
+  const int base_delay = 150;
+  const int min_delay = 50;
+  const int step_score = 5;
+  const int step_delay = 10;
+
+  int steps = score / step_score;
+
+  int delay = base_delay - steps * step_delay;
+
+  if (delay < min_delay) {
+    delay = min_delay;
+  }
+
+  return delay;
+}
+
 static void reset_game(Snake *snake, Food *food, int *score) {
   destroy_snake(snake);
   *snake = create_snake();
@@ -70,7 +87,8 @@ int main(void) {
       render_score(score);
       render_grid(grid);
 
-      usleep(TICK_INTERVEL_MS * 1000);
+      int delay_ms = compute_tick_delay_ms(score);
+      usleep(delay_ms * 1000);
     }
 
     render_game_over_with_score(score);
@@ -90,7 +108,7 @@ int main(void) {
       }
     }
 
-    usleep(TICK_INTERVEL_MS * 100);
+    usleep(10000);
   }
   destroy_snake(&snake);
   disable_raw_mode();
