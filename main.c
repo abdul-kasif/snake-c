@@ -62,6 +62,15 @@ static void reset_game(Snake *snake, Food *food, int *score) {
 int main(void) {
   enable_raw_mode();
 
+  srand((unsigned int)time(NULL));
+
+  clear_terminal();
+  render_instructions();
+
+  while (read_key() == -1) {
+    usleep(10000);
+  }
+
   bool running = true;
 
   GameState state = GAME_RUNNING;
@@ -71,8 +80,6 @@ int main(void) {
 
   char grid[GRID_HEIGHT][GRID_WIDTH];
   int score = 0;
-
-  srand((unsigned int)time(NULL));
 
   while (running) {
 

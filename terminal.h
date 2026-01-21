@@ -18,10 +18,12 @@ int read_key(void);
 
 TerminalSize get_terminal_size(void);
 
-void clear_terminal(void);
+void render_instructions(void);
+
 void clear_grid(char grid[GRID_HEIGHT][GRID_WIDTH]);
 void draw_snake_on_grid(char grid[GRID_HEIGHT][GRID_WIDTH], const Snake *s);
 void render_grid(const char grid[GRID_HEIGHT][GRID_WIDTH]);
+void clear_terminal(void);
 
 void draw_food_on_grid(char grid[GRID_HEIGHT][GRID_WIDTH], const Food *f);
 

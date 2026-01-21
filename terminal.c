@@ -55,6 +55,45 @@ static void compute_offsets(int *left, int *top) {
     *top = 0;
 }
 
+static void print_text_center(const char *text, const TerminalSize *ts,
+                              const int num_newlines) {
+  int left = (ts->cols - (int)strlen(text)) / 2;
+  if (left < 0) {
+    left = 0;
+  }
+  for (int s = 0; s < left; s++) {
+    putchar(' ');
+  }
+  printf("%s", text);
+
+  for (int i = 0; i < num_newlines; i++) {
+    putchar('\n');
+  }
+}
+void render_instructions(void) {
+  TerminalSize ts = get_terminal_size();
+
+  int top = (ts.rows / 2) - 8;
+  if (top < 0)
+    top = 0;
+
+  for (int i = 0; i < top; i++)
+    putchar('\n');
+
+  const char *instructions[] = {"==========================",
+                                "Press 'w' to go up",
+                                "Press 's' to go down",
+                                "Press 'a' to turn left",
+                                "Press 'd' to turn right",
+                                "Press 'q' to end the game",
+                                "Press 'p' to pause/resume the game",
+                                " Now Press any key to start the game",
+                                "==========================",
+                                NULL};
+  for (int i = 0; instructions[i]; i++) {
+    print_text_center(instructions[i], &ts, 2);
+  }
+}
 void clear_terminal(void) {
   printf("\033c");
   fflush(stdout);
@@ -110,22 +149,6 @@ void draw_food_on_grid(char grid[GRID_HEIGHT][GRID_WIDTH], const Food *f) {
 
   if (x >= 0 && x < GRID_WIDTH && y >= 0 && y < GRID_HEIGHT) {
     grid[y][x] = '#';
-  }
-}
-
-static void print_text_center(const char *text, const TerminalSize *ts,
-                              const int num_newlines) {
-  int left = (ts->cols - (int)strlen(text)) / 2;
-  if (left < 0) {
-    left = 0;
-  }
-  for (int s = 0; s < left; s++) {
-    putchar(' ');
-  }
-  printf("%s", text);
-
-  for (int i = 0; i < num_newlines; i++) {
-    putchar('\n');
   }
 }
 
